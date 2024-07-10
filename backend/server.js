@@ -27,7 +27,7 @@ const corsOptions = {
 	origin:
 		process.env.NODE_ENV === 'development'
 			? 'http://localhost:3000'
-			: 'https://65.2.161.115:5000', // Set your frontend URL in production
+			: 'http://65.2.161.115', // Set your frontend URL in production
 	credentials: true, // Allow credentials (cookies)
 	optionsSuccessStatus: 200
 }
