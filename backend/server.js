@@ -24,7 +24,7 @@ app.use(bodyParser.urlencoded({ extended: true }))
 
 // CORS configuration
 const corsOptions = {
-	origin: process.env.NODE_ENV === 'development' ? 'http://localhost:3000' : '', // Set your frontend URL in production
+	origin: process.env.NODE_ENV === 'development' ? 'http://localhost:3000' : 'todo-auth-f9p89r51j-rifkhankhans-projects.vercel.app', // Set your frontend URL in production
 	credentials: true, // Allow credentials (cookies)
 	optionsSuccessStatus: 200
 }
@@ -45,19 +45,19 @@ if (process.env.NODE_ENV === 'production') {
 	// Set static folder
 
 	// for render
-	// app.use(express.static(path.join(__dirname, '..', 'frontend', 'build')))
+	 app.use(express.static(path.join(__dirname, '..', 'frontend', 'build')))
 
 	// for vercel
-	app.use(express.static(path.join(__dirname, 'frontend', 'build')))
+	//app.use(express.static(path.join(__dirname, 'frontend', 'build')))
 
 	// Any route that is not an API will be redirected to index.html
 	app.get('*', (req, res) =>
 		res.sendFile(
 			// for render
-			// path.resolve(__dirname, '..', 'frontend', 'build', 'index.html')
+			 path.resolve(__dirname, '..', 'frontend', 'build', 'index.html')
 
 			// for vercel
-			path.resolve(__dirname, 'frontend', 'build', 'index.html')
+			//path.resolve(__dirname, 'frontend', 'build', 'index.html')
 		)
 	)
 } else {
