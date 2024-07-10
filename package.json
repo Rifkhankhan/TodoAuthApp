@@ -12,7 +12,7 @@
     "data:import": "node backend/seeder.js",
     "data:destroy": "node backend/seeder.js -d",
     "build": "npm install --legacy-peer-deps && npm install --legacy-peer-deps --prefix frontend && npm run build --prefix frontend",
-    "i": "npm install --legacy-peer-deps  && npm install --legacy-peer-deps --prefix  frontend"
+    "i": "npm install   && npm install  --prefix  frontend"
   },
   "author": "Rifkhan",
   "license": "MIT",
