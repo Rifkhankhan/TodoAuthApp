@@ -24,7 +24,10 @@ app.use(bodyParser.urlencoded({ extended: true }))
 
 // CORS configuration
 const corsOptions = {
-	origin: process.env.NODE_ENV === 'development' ? 'http://localhost:3000' : '', // Set your frontend URL in production
+	origin:
+		process.env.NODE_ENV === 'development'
+			? 'http://localhost:3000'
+			: 'https://65.2.161.115:5000', // Set your frontend URL in production
 	credentials: true, // Allow credentials (cookies)
 	optionsSuccessStatus: 200
 }
@@ -33,7 +36,6 @@ app.use(cors(corsOptions))
 
 // Connect to database
 connectDB()
-
 // Routes
 app.use('/task', taskRouter)
 app.use('/user', userRouter)
@@ -54,7 +56,7 @@ if (process.env.NODE_ENV === 'production') {
 	app.get('*', (req, res) =>
 		res.sendFile(
 			// for render
-			 path.resolve(__dirname, '..', 'frontend', 'build', 'index.html')
+			path.resolve(__dirname, '..', 'frontend', 'build', 'index.html')
 
 			// for vercel
 			//path.resolve(__dirname, 'frontend', 'build', 'index.html')

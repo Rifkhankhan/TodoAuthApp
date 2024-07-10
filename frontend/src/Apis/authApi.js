@@ -2,7 +2,9 @@ import axios from 'axios'
 
 const API = axios.create({
 	baseURL:
-		process.env.NODE_ENV === 'development' ? 'http://localhost:5000' : '',
+		process.env.NODE_ENV === 'development'
+			? 'http://localhost:5000'
+			: 'https://65.2.161.115:5000',
 	withCredentials: true // Include credentials (cookies)
 })
 
