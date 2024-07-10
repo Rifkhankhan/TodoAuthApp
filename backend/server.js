@@ -24,7 +24,7 @@ app.use(bodyParser.urlencoded({ extended: true }))
 
 // CORS configuration
 const corsOptions = {
-	origin: process.env.NODE_ENV === 'development' ? 'http://localhost:3000' : 'todo-auth-f9p89r51j-rifkhankhans-projects.vercel.app', // Set your frontend URL in production
+	origin: process.env.NODE_ENV === 'development' ? 'http://localhost:3000' : '', // Set your frontend URL in production
 	credentials: true, // Allow credentials (cookies)
 	optionsSuccessStatus: 200
 }
