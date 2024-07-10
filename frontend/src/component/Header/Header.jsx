@@ -1,4 +1,4 @@
-import React, { useEffect } from 'react'
+import React, { useEffect, useState } from 'react'
 import { Navbar, Container, Nav, Badge, NavDropdown } from 'react-bootstrap'
 import { FaShoppingCart, FaSignInAlt, FaUser } from 'react-icons/fa'
 import { useDispatch, useSelector } from 'react-redux'
@@ -7,21 +7,32 @@ import { LinkContainer } from 'react-router-bootstrap'
 // import { logout } from './../../store/authSlice'
 import SearchBox from '../SearchBox'
 import { logout } from '../../Actions/AuthAction'
+import { useLocation, useNavigate } from 'react-router-dom'
+import { toast } from 'react-toastify'
+
 const Header = () => {
-	// Retrieve user from localStorage
-	const userString = localStorage.getItem('user')
-
-	// Check if userString is not undefined or null before parsing
-	const user = userString ? JSON.parse(userString) : null
-
+	const { user } = useSelector(state => state.auth)
 	const dispatch = useDispatch()
+
+	const navigate = useNavigate()
+
+	const location = useLocation()
+
 	const logoutHandler = () => {
 		try {
-			dispatch(logout())
+			if (user) {
+				dispatch(logout())
+			}
 		} catch (error) {
-			console.log(error)
+			toast.error(error.message)
 		}
 	}
+
+	useEffect(() => {
+		if (!user) {
+			navigate('/home')
+		}
+	}, [user])
 
 	return (
 		<header>
@@ -33,7 +44,7 @@ const Header = () => {
 					<Navbar.Toggle aria-controls="basic-navbar-nav" />
 					<Navbar.Collapse id="basic-navbar-nav">
 						<Nav className="ms-auto">
-							<SearchBox />
+							{location.pathname === ('/' || '/home') && <SearchBox />}
 
 							{user ? (
 								<NavDropdown title={user?.name} id="username">

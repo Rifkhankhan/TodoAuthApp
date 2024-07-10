@@ -10,8 +10,6 @@ exports.getTasks = asyncHandler(async (req, res, next) => {
 			tasks: tasks
 		})
 	} catch (error) {
-		res.status(404).json({ success: false })
-
 		throw new Error('Task are not found')
 	}
 })
@@ -22,8 +20,7 @@ exports.getTask = asyncHandler(async (req, res, next) => {
 
 		res.status(200).json(task)
 	} catch (error) {
-		res.status(404)
-		throw new Error('Task are not found')
+		throw new Error(`Task are not found: ${error.message}`)
 	}
 })
 
@@ -36,16 +33,11 @@ exports.createTask = asyncHandler(async (req, res, next) => {
 			dueDate: req.body.dueDate || new Date()
 		})
 
-		// No need to call save() again because Task.create() already saves the document
-
 		const tasks = await Task.find({ user: req.user._id })
-
-		console.log(tasks)
 
 		res.status(200).json({ success: true, tasks: tasks })
 	} catch (error) {
-		console.error('Error creating task:', error.message) // Log the error for debugging purposes
-		res.status(500).json({ success: false, message: 'Failed to create task' })
+		throw new Error(`Failed to create task: ${error.message}`)
 	}
 })
 
@@ -72,20 +64,23 @@ exports.updateTask = asyncHandler(async (req, res) => {
 
 		res.status(200).json({ success: true, tasks: tasks })
 	} catch (error) {
-		console.error('Error updating task:', error.message) // Log the error for debugging purposes
-		res.status(500).json({ success: false, message: 'Failed to update task' })
+		throw new Error(`Failed to update task: ${error.message}`)
 	}
 })
 
 exports.deleteTask = asyncHandler(async (req, res, next) => {
 	const task = await Task.findById(req.params.id)
 
-	if (task) {
-		await Task.deleteOne({ _id: task._id })
+	try {
+		if (task) {
+			await Task.deleteOne({ _id: task._id })
 
-		res.status(200).json({ success: true, message: 'deleted Successfully!' })
-	} else {
-		res.status(404).json({ success: false, message: 'problem with deleting!' })
+			res.status(200).json({ success: true, message: 'deleted Successfully!' })
+		} else {
+			throw new Error(`task not found `)
+		}
+	} catch (error) {
+		throw new Error(`Failed to delete task: ${error.message}`)
 	}
 })
 
@@ -105,7 +100,6 @@ exports.toggleTask = asyncHandler(async (req, res) => {
 
 		res.status(200).json({ success: true, tasks: tasks })
 	} catch (error) {
-		console.error('Error updating task:', error.message) // Log the error for debugging purposes
-		res.status(500).json({ success: false, message: 'Failed to toggle task' })
+		throw new Error(`Failed to toggele task: ${error.message}`)
 	}
 })

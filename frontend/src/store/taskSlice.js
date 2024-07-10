@@ -5,7 +5,8 @@ export const taskSlice = createSlice({
 	initialState: {
 		loading: false,
 
-		tasks: []
+		tasks: [],
+		searchKey: ''
 	},
 	reducers: {
 		createTask: (state, action) => {
@@ -13,6 +14,10 @@ export const taskSlice = createSlice({
 		},
 		getTasks: (state, action) => {
 			state.tasks = [...action.payload]
+		},
+		setSearchKey: (state, action) => {
+			console.log(action.payload)
+			state.searchKey = action.payload
 		},
 		handleLoading: state => {
 			state.loading = !state.loading

@@ -19,7 +19,8 @@ const Signup = () => {
 	const dispatch = useDispatch()
 	const [formValid, setFormValid] = useState(true)
 	const navigate = useNavigate()
-	const isAuthenticated = useSelector(state => state.auth.isAuthenticated)
+	const { user } = useSelector(state => state.auth)
+
 	const isLoading = useSelector(state => state.auth.isLoading)
 
 	const initialInputsState = {
@@ -31,11 +32,11 @@ const Signup = () => {
 
 	useEffect(() => {
 		if (formSubmit) {
-			if (isAuthenticated) {
+			if (user) {
 				navigate('/')
 			}
 		}
-	}, [isAuthenticated])
+	}, [user, formSubmit])
 
 	useEffect(() => {
 		setFormValid(

@@ -39,6 +39,8 @@ const EditScreen = () => {
 				dueDate: { value: task.dueDate, isValid: true },
 				description: { value: task.description, isValid: true }
 			})
+		} else {
+			navigate('/')
 		}
 	}, [task])
 	const inputTextChangeHandler = (inputType, enteredValue) => {
@@ -127,7 +129,7 @@ const EditScreen = () => {
 					{task && (
 						<Form onSubmit={submitHandler}>
 							<Form.Group controlId="name" className="mt-2">
-								<Form.Label>Name</Form.Label>
+								<Form.Label>Title</Form.Label>
 								<Form.Control
 									type="text"
 									placeholder="Enter Product Title"

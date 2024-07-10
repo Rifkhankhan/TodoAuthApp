@@ -1,12 +1,19 @@
 import { createSlice } from '@reduxjs/toolkit'
 
+// Retrieve user from localStorage
+const userString = localStorage.getItem('user')
+
+// Check if userString is not undefined or null before parsing
+const user = userString ? JSON.parse(userString) : null
+const initialState = {
+	user: user,
+	isAuthenticated: false,
+	isLoading: false
+}
+
 export const authSlice = createSlice({
 	name: 'auth',
-	initialState: {
-		isAuthenticated: false,
-		user: [],
-		isLoading: false
-	},
+	initialState,
 	reducers: {
 		login: (state, action) => {
 			if (action.payload.success) {

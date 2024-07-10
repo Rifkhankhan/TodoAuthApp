@@ -19,7 +19,7 @@ const Login = () => {
 	const dispatch = useDispatch()
 	const [formValid, setFormValid] = useState(true)
 	const navigate = useNavigate()
-	const isAuthenticated = useSelector(state => state.auth.isAuthenticated)
+	const { user } = useSelector(state => state.auth)
 	const isLoading = useSelector(state => state.auth.isLoading)
 
 	const initialInputsState = {
@@ -29,18 +29,18 @@ const Login = () => {
 	const [inputs, setInputs] = useState(initialInputsState)
 
 	useEffect(() => {
-		if (isAuthenticated) {
+		if (user) {
 			navigate('/')
 		}
 	}, [])
 
 	useEffect(() => {
 		if (formSubmit) {
-			if (isAuthenticated) {
+			if (user) {
 				navigate('/')
 			}
 		}
-	}, [isAuthenticated, formSubmit])
+	}, [user, formSubmit])
 
 	useEffect(() => {
 		setFormValid(inputs.email.isValid && inputs.password.isValid)

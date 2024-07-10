@@ -3,6 +3,26 @@ import { taskActions } from '../store/taskSlice'
 import { toast } from 'react-toastify'
 import 'react-toastify/dist/ReactToastify.css'
 
+export const showToastError = (message, autoClose = 2000) => {
+	toast.error(message, { autoClose })
+}
+
+export const getErrorMessages = errorMessage => {
+	return {
+		400: `Oops! Something went wrong: ${errorMessage}`,
+		401: `Unauthorized: ${errorMessage}`,
+		403: `Forbidden: ${errorMessage}`,
+		404: `You don't have an account: ${errorMessage}`,
+		409: `Oops! You have no access: ${errorMessage}`,
+		408: `Request Timeout: ${errorMessage}`,
+		429: `Too Many Requests: ${errorMessage}`,
+		500: `Internal Server Error: ${errorMessage}`,
+		502: `Bad Gateway: ${errorMessage}`,
+		503: `Service Unavailable: ${errorMessage}`,
+		504: `Gateway Timeout: ${errorMessage}`
+	}
+}
+
 export const createTask = formData => async dispatch => {
 	dispatch(taskActions.handleLoading())
 	try {
@@ -15,27 +35,16 @@ export const createTask = formData => async dispatch => {
 			})
 		}
 	} catch (error) {
-		if (error.response?.status === 400) {
-			toast.error(`Oops! Something Wrong: ${error.response.data.message}`, {
-				autoClose: 2000
-			})
-		} else if (error.response?.status === 404) {
-			toast.error(`You don't have an Account: ${error.response.data.message}`, {
-				autoClose: 2000
-			})
-		} else if (error.response?.status === 409) {
-			toast.error(`Oops! You have no access: ${error.response.data.message}`, {
-				autoClose: 2000
-			})
-		} else if (error.response?.status === 408) {
-			toast.error(`Internal Server Error: ${error.response.data.message}`, {
-				autoClose: 2000
-			})
-		} else if (error.response?.status === 500) {
-			toast.error(`Internal Server Error: ${error.response.data.message}`, {
-				autoClose: 2000
-			})
+		if (error.code === 'ERR_NETWORK') {
+			showToastError('Network Error: Please check your internet connection.')
+			return
 		}
+		const status = error.response?.status
+		const errorMessage = error.response?.data?.message || 'Something went wrong'
+
+		const errorMessages = getErrorMessages(errorMessage)
+
+		showToastError(errorMessages[status] || `Error: ${errorMessage}`)
 	}
 	dispatch(taskActions.handleLoading())
 }
@@ -49,27 +58,16 @@ export const getTasks = () => async dispatch => {
 			dispatch(taskActions.createTask(data.tasks))
 		}
 	} catch (error) {
-		if (error.response?.status === 400) {
-			toast.error(`Oops! Something Wrong: ${error.response.data.message}`, {
-				autoClose: 2000
-			})
-		} else if (error.response?.status === 404) {
-			toast.error(`You don't have an Account: ${error.response.data.message}`, {
-				autoClose: 2000
-			})
-		} else if (error.response?.status === 409) {
-			toast.error(`Oops! You have no access: ${error.response.data.message}`, {
-				autoClose: 2000
-			})
-		} else if (error.response?.status === 408) {
-			toast.error(`Internal Server Error: ${error.response.data.message}`, {
-				autoClose: 2000
-			})
-		} else if (error.response?.status === 500) {
-			toast.error(`Internal Server Error: ${error.response.data.message}`, {
-				autoClose: 2000
-			})
+		if (error.code === 'ERR_NETWORK') {
+			showToastError('Network Error: Please check your internet connection.')
+			return
 		}
+		const status = error.response?.status
+		const errorMessage = error.response?.data?.message || 'Something went wrong'
+
+		const errorMessages = getErrorMessages(errorMessage)
+
+		showToastError(errorMessages[status] || `Error: ${errorMessage}`)
 	}
 	dispatch(taskActions.handleLoading())
 }
@@ -89,33 +87,17 @@ export const updateTask =
 				})
 			}
 		} catch (error) {
-			if (error.response?.status === 400) {
-				toast.error(`Oops! Something Wrong: ${error.response.data.message}`, {
-					autoClose: 2000
-				})
-			} else if (error.response?.status === 404) {
-				toast.error(
-					`You don't have an Account: ${error.response.data.message}`,
-					{
-						autoClose: 2000
-					}
-				)
-			} else if (error.response?.status === 409) {
-				toast.error(
-					`Oops! You have no access: ${error.response.data.message}`,
-					{
-						autoClose: 2000
-					}
-				)
-			} else if (error.response?.status === 408) {
-				toast.error(`Internal Server Error: ${error.response.data.message}`, {
-					autoClose: 2000
-				})
-			} else if (error.response?.status === 500) {
-				toast.error(`Internal Server Error: ${error.response.data.message}`, {
-					autoClose: 2000
-				})
+			if (error.code === 'ERR_NETWORK') {
+				showToastError('Network Error: Please check your internet connection.')
+				return
 			}
+			const status = error.response?.status
+			const errorMessage =
+				error.response?.data?.message || 'Something went wrong'
+
+			const errorMessages = getErrorMessages(errorMessage)
+
+			showToastError(errorMessages[status] || `Error: ${errorMessage}`)
 		}
 		dispatch(taskActions.handleLoading())
 	}
@@ -136,27 +118,16 @@ export const toggleTask = task => async dispatch => {
 			)
 		}
 	} catch (error) {
-		if (error.response?.status === 400) {
-			toast.error(`Oops! Something Wrong: ${error.response.data.message}`, {
-				autoClose: 2000
-			})
-		} else if (error.response?.status === 404) {
-			toast.error(`You don't have an Account: ${error.response.data.message}`, {
-				autoClose: 2000
-			})
-		} else if (error.response?.status === 409) {
-			toast.error(`Oops! You have no access: ${error.response.data.message}`, {
-				autoClose: 2000
-			})
-		} else if (error.response?.status === 408) {
-			toast.error(`Internal Server Error: ${error.response.data.message}`, {
-				autoClose: 2000
-			})
-		} else if (error.response?.status === 500) {
-			toast.error(`Internal Server Error: ${error.response.data.message}`, {
-				autoClose: 2000
-			})
+		if (error.code === 'ERR_NETWORK') {
+			showToastError('Network Error: Please check your internet connection.')
+			return
 		}
+		const status = error.response?.status
+		const errorMessage = error.response?.data?.message || 'Something went wrong'
+
+		const errorMessages = getErrorMessages(errorMessage)
+
+		showToastError(errorMessages[status] || `Error: ${errorMessage}`)
 	}
 	dispatch(taskActions.handleLoading())
 }
@@ -169,33 +140,18 @@ export const deleteTask = id => async dispatch => {
 			toast.success('Deleted Successfully!', {
 				autoClose: 2000
 			})
-		} else {
-			toast.error('Opps Something wrong!', {
-				autoClose: 2000
-			})
 		}
 	} catch (error) {
-		if (error.response?.status === 400) {
-			toast.error(`Oops! Something Wrong: ${error.response.data.message}`, {
-				autoClose: 2000
-			})
-		} else if (error.response?.status === 404) {
-			toast.error(`You don't have an Account: ${error.response.data.message}`, {
-				autoClose: 2000
-			})
-		} else if (error.response?.status === 409) {
-			toast.error(`Oops! You have no access: ${error.response.data.message}`, {
-				autoClose: 2000
-			})
-		} else if (error.response?.status === 408) {
-			toast.error(`Internal Server Error: ${error.response.data.message}`, {
-				autoClose: 2000
-			})
-		} else if (error.response?.status === 500) {
-			toast.error(`Internal Server Error: ${error.response.data.message}`, {
-				autoClose: 2000
-			})
+		if (error.code === 'ERR_NETWORK') {
+			showToastError('Network Error: Please check your internet connection.')
+			return
 		}
+		const status = error.response?.status
+		const errorMessage = error.response?.data?.message || 'Something went wrong'
+
+		const errorMessages = getErrorMessages(errorMessage)
+
+		showToastError(errorMessages[status] || `Error: ${errorMessage}`)
 	}
 	dispatch(taskActions.handleLoading())
 }

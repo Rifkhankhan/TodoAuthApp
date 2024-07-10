@@ -2,6 +2,7 @@ import { authActions } from '../store/authSlice'
 import { toast } from 'react-toastify'
 import 'react-toastify/dist/ReactToastify.css'
 import * as AuthApi from '../Apis/authApi'
+import { getErrorMessages, showToastError } from './taskActions'
 
 export const logIn = formData => async dispatch => {
 	dispatch(authActions.handleLoading())
@@ -15,43 +16,16 @@ export const logIn = formData => async dispatch => {
 			dispatch(authActions.login(data))
 		}
 	} catch (error) {
-		if (error.response?.status === 400) {
-			toast.error(`Oops! Something Wrong: ${error?.response?.data?.message}`, {
-				autoClose: 2000
-			})
-		} else if (error.response?.status === 401) {
-			toast.error(
-				`Invalid Email Or passwordt: ${error?.response?.data?.message}`,
-				{
-					autoClose: 2000
-				}
-			)
-		} else if (error.response?.status === 404) {
-			toast.error(
-				`You don't have an Account: ${error?.response?.data?.message}`,
-				{
-					autoClose: 2000
-				}
-			)
-		} else if (error.response?.status === 409) {
-			toast.error(
-				`Oops! You have no access: ${error?.response?.data?.message}`,
-				{
-					autoClose: 2000
-				}
-			)
-		} else if (error.response?.status === 408) {
-			toast.error(`Internal Server Error: ${error?.response?.data?.message}`, {
-				autoClose: 2000
-			})
-		} else if (error.response?.status === 500) {
-			toast.error(
-				`Internal Server Error ${error.response?.status}: ${error?.response?.data?.message}`,
-				{
-					autoClose: 2000
-				}
-			)
+		if (error.code === 'ERR_NETWORK') {
+			showToastError('Network Error: Please check your internet connection.')
+			return
 		}
+		const status = error.response?.status
+		const errorMessage = error.response?.data?.message || 'Something went wrong'
+
+		const errorMessages = getErrorMessages(errorMessage)
+
+		showToastError(errorMessages[status] || `Error: ${errorMessage}`)
 	}
 	dispatch(authActions.handleLoading())
 }
@@ -66,35 +40,19 @@ export const logout = () => async dispatch => {
 			toast.success('LoggedOut Successfully!', {
 				autoClose: 2000
 			})
+			window.location.reload()
 		}
 	} catch (error) {
-		if (error.response?.status === 400) {
-			toast.error(`Oops! Something Wrong: ${error?.response?.data?.message}`, {
-				autoClose: 2000
-			})
-		} else if (error.response?.status === 404) {
-			toast.error(
-				`You don't have an Account: ${error?.response?.data?.message}`,
-				{
-					autoClose: 2000
-				}
-			)
-		} else if (error.response?.status === 409) {
-			toast.error(
-				`Oops! You have no access: ${error?.response?.data?.message}`,
-				{
-					autoClose: 2000
-				}
-			)
-		} else if (error.response?.status === 408) {
-			toast.error(`Internal Server Error: ${error?.response?.data?.message}`, {
-				autoClose: 2000
-			})
-		} else if (error.response?.status === 500) {
-			toast.error(`Internal Server Error: ${error?.response?.data?.message}`, {
-				autoClose: 2000
-			})
+		if (error.code === 'ERR_NETWORK') {
+			showToastError('Network Error: Please check your internet connection.')
+			return
 		}
+		const status = error.response?.status
+		const errorMessage = error.response?.data?.message || 'Something went wrong'
+
+		const errorMessages = getErrorMessages(errorMessage)
+
+		showToastError(errorMessages[status] || `Error: ${errorMessage}`)
 	}
 	dispatch(authActions.handleLoading())
 }
@@ -106,34 +64,16 @@ export const autoLogin = () => async dispatch => {
 
 		dispatch(authActions.autoLogin(data))
 	} catch (error) {
-		if (error.response?.status === 400) {
-			toast.error(`Oops! Something Wrong: ${error?.response?.data?.message}`, {
-				autoClose: 2000
-			})
-		} else if (error.response?.status === 404) {
-			toast.error(`Authentication Error: ${error?.response?.data?.message}`, {
-				autoClose: 2000
-			})
-		} else if (error.response?.status === 401) {
-			console.log(error?.response?.data?.message)
-		} else if (error.response?.status === 409) {
-			toast.error(
-				`Oops! You have no access: ${error?.response?.data?.message}`,
-				{
-					autoClose: 2000
-				}
-			)
-		} else if (error.response?.status === 408) {
-			toast.error(`Internal Server Error: ${error?.response?.data?.message}`, {
-				autoClose: 2000
-			})
-		} else if (error.response?.status === 500) {
-			console.log(error?.response?.data?.message)
-		} else if (error.response?.status === 405) {
-			toast.error(`Internal Server Error: ${error?.response?.data?.message}`, {
-				autoClose: 2000
-			})
+		if (error.code === 'ERR_NETWORK') {
+			showToastError('Network Error: Please check your internet connection.')
+			return
 		}
+		const status = error.response?.status
+		const errorMessage = error.response?.data?.message || 'Something went wrong'
+
+		const errorMessages = getErrorMessages(errorMessage)
+
+		showToastError(errorMessages[status] || `Error: ${errorMessage}`)
 	}
 
 	dispatch(authActions.handleLoading())
@@ -150,43 +90,16 @@ export const registerUser = formData => async dispatch => {
 			dispatch(authActions.login(data))
 		}
 	} catch (error) {
-		if (error.response?.status === 400) {
-			toast.error(`User already exist`, {
-				autoClose: 2000
-			})
-		} else if (error.response?.status === 401) {
-			toast.error(
-				`Invalid Email Or passwordt: ${error?.response?.data?.message}`,
-				{
-					autoClose: 2000
-				}
-			)
-		} else if (error.response?.status === 404) {
-			toast.error(
-				`You don't have an Account: ${error?.response?.data?.message}`,
-				{
-					autoClose: 2000
-				}
-			)
-		} else if (error.response?.status === 409) {
-			toast.error(
-				`Oops! You have no access: ${error?.response?.data?.message}`,
-				{
-					autoClose: 2000
-				}
-			)
-		} else if (error.response?.status === 408) {
-			toast.error(`Internal Server Error: ${error?.response?.data?.message}`, {
-				autoClose: 2000
-			})
-		} else if (error.response?.status === 500) {
-			toast.error(
-				`Internal Server Error ${error.response?.status}: ${error?.response?.data?.message}`,
-				{
-					autoClose: 2000
-				}
-			)
+		if (error.code === 'ERR_NETWORK') {
+			showToastError('Network Error: Please check your internet connection.')
+			return
 		}
+		const status = error.response?.status
+		const errorMessage = error.response?.data?.message || 'Something went wrong'
+
+		const errorMessages = getErrorMessages(errorMessage)
+
+		showToastError(errorMessages[status] || `Error: ${errorMessage}`)
 	}
 	dispatch(authActions.handleLoading())
 }

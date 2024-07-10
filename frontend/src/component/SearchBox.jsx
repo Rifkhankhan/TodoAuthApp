@@ -1,22 +1,24 @@
 import React, { useRef, useState } from 'react'
 import { Button, Form } from 'react-bootstrap'
 import { FaSearch, FaTimes } from 'react-icons/fa'
+import { useDispatch, useSelector } from 'react-redux'
 import { useNavigate, useParams } from 'react-router-dom'
+import { taskActions } from './../store/taskSlice.js'
 
 const SearchBox = () => {
+	const { searchKey } = useSelector(state => state.task)
+
 	const navigate = useNavigate()
-	const { keyword: urlKeyword } = useParams()
-	const [searchClick, setSearchClick] = useState(false)
-	const [keyword, setKeyword] = useState(urlKeyword)
+	const dispatch = useDispatch()
+	const [searchClick, setSearchClick] = useState(
+		searchKey !== '' ? true : false
+	)
+	const [keyword, setKeyword] = useState(searchKey)
 
 	const submitHandler = e => {
 		e.preventDefault()
 
-		if (keyword?.trim()) {
-			navigate(`/search/${keyword}`)
-		} else {
-			navigate('/')
-		}
+		dispatch(taskActions.setSearchKey(keyword))
 	}
 
 	const clickHandler = e => {
@@ -25,7 +27,7 @@ const SearchBox = () => {
 
 	const closeSearchHandler = () => {
 		setKeyword('')
-		navigate('/')
+		dispatch(taskActions.setSearchKey(''))
 	}
 
 	return (
@@ -62,7 +64,7 @@ const SearchBox = () => {
 					</div>
 					<Button
 						type="submit"
-						variant="outline-light"
+						variant="outline-primary"
 						className="text-light ms-1 px-2">
 						Search
 					</Button>

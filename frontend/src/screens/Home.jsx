@@ -1,7 +1,7 @@
 import React, { useCallback, useEffect, useState } from 'react'
 import { Button, Col, Container, Row } from 'react-bootstrap'
 import TaskTable from './../component/TaskTable'
-import { Link } from 'react-router-dom'
+import { Link, useOutletContext } from 'react-router-dom'
 import { useDispatch, useSelector } from 'react-redux'
 import Loading from './../component/Loading'
 import { getTasks } from '../Actions/taskActions'
@@ -50,8 +50,6 @@ const Home = () => {
 				setShowModal={setShowModal}
 				task={clickedRow}
 			/>
-
-			{loading && <LoadingSpinner />}
 		</Container>
 	)
 }

@@ -1,20 +1,35 @@
 import './App.css'
 import { ToastContainer } from 'react-toastify'
 
-import { BrowserRouter } from 'react-router-dom'
-import { Provider, useSelector } from 'react-redux'
-import Routers from './Router/Routers'
-import { store } from './store'
+import { useDispatch, useSelector } from 'react-redux'
+
 import LoadingSpinner from './component/LoadingSpinner/LoadingSpinner'
+import Header from './component/Header/Header'
+import { Outlet } from 'react-router-dom'
+import { useEffect, useState } from 'react'
+import { getTasks } from './Actions/taskActions'
+import { autoLogin } from './Actions/AuthAction'
 
 function App() {
+	const dispatch = useDispatch()
+	const { loading } = useSelector(state => state.task)
+	const { isLoading, user } = useSelector(state => state.auth)
+
+	useEffect(() => {
+		if (user) {
+			dispatch(autoLogin())
+			dispatch(getTasks())
+		}
+	}, [])
 	return (
-		<Provider store={store}>
-			<div className="App">
-				<Routers />
-				<ToastContainer />
-			</div>
-		</Provider>
+		<>
+			<Header />
+			<main>
+				<Outlet />
+			</main>
+			{(loading || isLoading) && <LoadingSpinner />}
+			<ToastContainer />
+		</>
 	)
 }
 

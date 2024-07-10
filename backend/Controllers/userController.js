@@ -3,12 +3,14 @@ const UserModel = require('../Models/UserModel')
 const generateToken = require('./../Utils/generateToken')
 const jwt = require('jsonwebtoken')
 exports.logoutUser = asyncHandler(async (req, res, next) => {
-	res.cookie('jwt', '', {
-		httpOnly: true,
-		expires: new Date(0)
-	})
+	try {
+		res.cookie('jwt', '', {
+			httpOnly: true,
+			expires: new Date(0)
+		})
 
-	res.status(200).json({ success: true, message: 'Logged out Succesfully' })
+		res.status(200).json({ success: true, message: 'Logged out Succesfully' })
+	} catch (error) {}
 })
 
 exports.authUser = asyncHandler(async (req, res, next) => {
@@ -28,9 +30,7 @@ exports.authUser = asyncHandler(async (req, res, next) => {
 
 		res.status(201).json({ success: true, user: data })
 	} else {
-		res
-			.status(401)
-			.json({ success: false, message: 'Invalid Email Or password' })
+		throw new Error('Failed to logout ')
 	}
 })
 
@@ -73,7 +73,6 @@ exports.getUsers = asyncHandler(async (req, res, next) => {
 
 		res.status(200).json(users)
 	} catch (error) {
-		res.status(404)
 		throw new Error('users are not found')
 	}
 })
@@ -107,7 +106,6 @@ exports.updateUserProfile = asyncHandler(async (req, res, next) => {
 
 		res.status(200).json(updateProfile)
 	} else {
-		res.status(404)
 		throw new Error('user is not found')
 	}
 })
