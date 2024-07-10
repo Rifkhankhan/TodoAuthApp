@@ -43,12 +43,21 @@ const port = process.env.PORT || 5000
 // Deployment settings
 if (process.env.NODE_ENV === 'production') {
 	// Set static folder
-	app.use(express.static(path.join(__dirname, '..', 'frontend', 'build')))
+
+	// for render
+	// app.use(express.static(path.join(__dirname, '..', 'frontend', 'build')))
+
+	// for vercel
+	app.use(express.static(path.join(__dirname, 'frontend', 'build')))
 
 	// Any route that is not an API will be redirected to index.html
 	app.get('*', (req, res) =>
 		res.sendFile(
-			path.resolve(__dirname, '..', 'frontend', 'build', 'index.html')
+			// for render
+			// path.resolve(__dirname, '..', 'frontend', 'build', 'index.html')
+
+			// for vercel
+			path.resolve(__dirname, 'frontend', 'build', 'index.html')
 		)
 	)
 } else {
